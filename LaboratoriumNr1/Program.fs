@@ -4,16 +4,22 @@
 
 open System;
 
-let rec calculateSumOfInputNumbers (sum, product) count = 
-    let inputInt = Int32.Parse( Console.ReadLine() )
-    let inputDouble = Convert.ToDouble(inputInt)
-    if inputInt <> 0 then calculateSumOfInputNumbers ((sum + inputInt), (product * inputDouble)) (count + 1.0)
-    else (sum, product ** count)
+let calculateAverages input (sum, product) counter =
+    match input with
+    | 0 -> (sum, Math.Pow(product,  (1.0 / counter)))
+    | _ -> ((sum + input), (product * Convert.ToDouble(input)))
+
+let rec exerciseSix (sum, product) counter = 
+    let isTrue, input = Int32.TryParse( Console.ReadLine() )
+    match isTrue with
+    | true ->   let result = calculateAverages input (sum, product) counter
+                exerciseSix result (counter + 1.0)
+    | false ->  (sum, product)
 
 [<EntryPoint>]
 let main argv = 
-    let result = calculateSumOfInputNumbers (0, 1.0) 0.0
+    let result = exerciseSix (0, 1.0) 0.0
     printfn "%A" result
-    //printfn "%A" (9.0 ** 0.5)
+
     Console.ReadLine() |> ignore
     0
